@@ -416,7 +416,7 @@
       const dateDDMMYYYY = (function(d){
         if(!d) return '';
         const [y,m,day]=d.split('-'); return `${day}${m}${y}`;
-      })(d ateRaw);
+      })(dateRaw);
 
       const barcodeFormat=document.getElementById('labelBarcodeFormat').value;
       const barcodeWidth=parseFloat(document.getElementById('labelBarcodeWidth').value||'2');

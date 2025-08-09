@@ -54,14 +54,14 @@
 
     /* -------- XEM TRƯỚC TEM: đúng 2 kích thước thực tế -------- */
     .label-preview{background:#fff;border:2px dashed #999;margin:20px auto;font-family:Arial,sans-serif;position:relative;display:inline-block;overflow:hidden}
-    .label-70x100{width:70mm;height:100mm}   /* đúng 70 x 100 mm */
-    .label-30x40{width:30mm;height:40mm}     /* đúng 30 x 40 mm */
+    .label-70x100{width:70mm;height:100mm}
+    .label-30x40{width:30mm;height:40mm}
 
     /* Lưới 9 khối + khoảng cách 1%, top 2%, bottom 2% */
     .label-canvas{
       display:grid;width:100%;height:100%;
       grid-template-rows:
-        2%  /* top space */
+        2%  /* top */
         12% /* b1 */
         1%  /* gap */
         3%  /* b2 */
@@ -79,10 +79,10 @@
         25% /* b8 */
         1%  /* gap */
         7%  /* b9 */
-        2%  /* bottom space */
+        2%  /* bottom */
       ;
-      padding-left:10px; /* mọi khối cách mép trái 10px */
-      --h:1000px; /* chiều cao px thực tế, được set sau khi render */
+      padding-left:10px;
+      --h:1000px; /* set sau khi render */
       overflow:hidden;
     }
 
@@ -91,52 +91,56 @@
     .b1-inner{width:100%;height:100%;padding-top:1px;padding-bottom:1px}
     .b1-inner img{max-width:100%;max-height:100%;object-fit:contain;display:block;margin:0 auto}
 
-    /* KHỐI 2: tên thương hiệu */
-    .b2{grid-row:4;display:flex;align-items:center;justify-content:center;text-align:center}
-    .b2-inner{width:100%;height:100%;padding:5px 0}
-    .b2-inner .brand{font-weight:700;font-size:clamp(8px, calc(var(--h)*0.035), 28px);line-height:1.05}
+    /* KHỐI 2: thương hiệu, 3% chiều cao -> cỡ chữ ~70% chiều cao hàng */
+    .b2{grid-row:4;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+    .b2-inner{width:100%;height:100%}
+    .b2-inner .brand{font-weight:700;font-size:calc(var(--h)*0.021);line-height:1.05;white-space:nowrap}
 
-    /* KHỐI 3: tên sản phẩm */
-    .b3{grid-row:6;display:flex;align-items:center;justify-content:flex-start;text-align:left}
-    .b3-inner{width:100%;height:100%;padding:5px 0}
-    .b3-inner .product{font-weight:800;font-size:clamp(9px, calc(var(--h)*0.045), 32px);line-height:1.05}
-
-    /* KHỐI 4: tên kỹ thuật */
-    .b4{grid-row:8;display:flex;align-items:center;justify-content:flex-start;text-align:left}
-    .b4-inner{width:100%;height:100%;padding:5px 0}
-    .b4-inner .tech{font-weight:800;font-size:clamp(8px, calc(var(--h)*0.035), 26px);line-height:1.05}
-
-    /* KHỐI 5: bảng thông số 2 hàng chiếm 100% */
-    .b5{grid-row:10;display:flex;align-items:stretch;justify-content:flex-start;text-align:left}
-    .b5-inner{width:100%;height:100%;padding:0} /* bỏ padding để 100% không bị cộng dồn */
-    .b5-inner table{width:100%;height:100%;table-layout:fixed;border-collapse:collapse;border:2px solid #000;box-sizing:border-box}
-    .b5-inner tr{height:50%}
-    .b5-inner th,.b5-inner td{
-      border:1.5px solid #000;padding:2px 4px;vertical-align:middle;text-align:left;
-      font-weight:700;font-size:clamp(7px, calc(var(--h)*0.018), 16px);line-height:1.1
+    /* KHỐI 3: sản phẩm, 4% -> ~75% chiều cao hàng */
+    .b3{grid-row:6;display:flex;align-items:center;justify-content:flex-start;text-align:left;overflow:hidden}
+    .b3-inner{width:100%;height:100%}
+    .b3-inner .product{
+      font-weight:800;font-size:calc(var(--h)*0.03);line-height:1.05;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis
     }
-    .b5-inner th{background:#f3f4f6}
 
-    /* KHỐI 6: thông tin công ty căn giữa */
-    .b6{grid-row:12;display:flex;align-items:center;justify-content:center;text-align:center}
-    .b6-inner{width:100%;height:100%;padding:5px 0}
-    .b6-inner .company{font-size:clamp(7px, calc(var(--h)*0.02), 14px);line-height:1.2}
+    /* KHỐI 4: kỹ thuật, 3% */
+    .b4{grid-row:8;display:flex;align-items:center;justify-content:flex-start;text-align:left;overflow:hidden}
+    .b4-inner{width:100%;height:100%}
+    .b4-inner .tech{font-weight:800;font-size:calc(var(--h)*0.022);line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    /* KHỐI 7: số điện thoại */
-    .b7{grid-row:14;display:flex;align-items:center;justify-content:flex-start;text-align:left}
-    .b7-inner{width:100%;height:100%;padding:5px 0}
-    .b7-inner .phone{font-weight:800;font-size:clamp(8px, calc(var(--h)*0.03), 18px);line-height:1.1}
+    /* KHỐI 5: chuyển sang grid 2x2, luôn kín 100% khối */
+    .b5{grid-row:10;display:flex;align-items:stretch}
+    .b5-inner{width:100%;height:100%;padding:0}
+    .spec-grid{
+      display:grid;width:100%;height:100%;
+      grid-template-columns:auto 1fr;
+      grid-template-rows:1fr 1fr;
+      border:2px solid #000
+    }
+    .cell{display:flex;align-items:center;padding:2px 4px;font-weight:700;font-size:calc(var(--h)*0.018);line-height:1.1;border:1.5px solid #000}
+    .cell.head{background:#f3f4f6}
+
+    /* KHỐI 6: thông tin công ty, 5% -> ~60% chiều cao hàng */
+    .b6{grid-row:12;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+    .b6-inner{width:100%;height:100%}
+    .b6-inner .company{font-size:calc(var(--h)*0.018);line-height:1.2}
+
+    /* KHỐI 7: điện thoại, 3% */
+    .b7{grid-row:14;display:flex;align-items:center;justify-content:flex-start;text-align:left;overflow:hidden}
+    .b7-inner{width:100%;height:100%}
+    .b7-inner .phone{font-weight:800;font-size:calc(var(--h)*0.024);line-height:1.05;white-space:nowrap}
 
     /* KHỐI 8: mã vạch */
     .b8{grid-row:16;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
-    .b8-inner{width:100%;height:100%;padding:5px 0}
+    .b8-inner{width:100%;height:100%}
     .b8-inner img{width:100%;height:100%;object-fit:contain;display:block;margin:0 auto}
 
-    /* KHỐI 9: Made in Vietnam + ngày */
-    .b9{grid-row:18;display:flex;align-items:center;justify-content:center;text-align:center}
-    .b9-inner{width:100%;height:100%;padding:5px 0}
-    .b9-inner .madein{font-weight:700;font-size:clamp(8px, calc(var(--h)*0.03), 18px);line-height:1.15}
-    .b9-inner .mfgdate{display:block;font-weight:600;font-size:clamp(7px, calc(var(--h)*0.02), 14px)}
+    /* KHỐI 9: Made in + ngày, 7% */
+    .b9{grid-row:18;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+    .b9-inner{width:100%;height:100%}
+    .b9-inner .madein{font-weight:700;font-size:calc(var(--h)*0.049);line-height:1.1}
+    .b9-inner .mfgdate{display:block;font-weight:600;font-size:calc(var(--h)*0.022)}
 
     #barcodeCanvas,#labelBarcodeCanvas{display:none}
 
@@ -169,7 +173,6 @@
       <button class="tab" onclick="switchTab('label')">🏷️ Tạo Tem Sản Phẩm</button>
     </div>
 
-    <!-- TAB 1: TẠO MÃ VẠCH -->
     <div id="barcode-tab" class="tab-content active">
       <div class="form-row">
         <div class="form-group">
@@ -217,7 +220,6 @@
       </div>
     </div>
 
-    <!-- TAB 2: TẠO TEM SẢN PHẨM -->
     <div id="label-tab" class="tab-content">
       <div class="form-group">
         <label for="labelSize">📏 Kích thước tem:</label>
@@ -313,7 +315,6 @@
   <canvas id="labelBarcodeCanvas" style="display:none;"></canvas>
 
   <script>
-    /* ===== Trạng thái & Chuyển tab ===== */
     let currentTab='barcode';
     let currentBarcodeDataURL='';
 
@@ -330,7 +331,6 @@
       }
     }
 
-    /* ===== Tab 1: tạo mã vạch ===== */
     function generateBarcode(){
       const text=(document.getElementById('barcodeInput').value||'').trim();
       const format=document.getElementById('barcodeFormat').value;
@@ -374,7 +374,6 @@
       }catch(e){alert('Lỗi tải xuống: '+e.message);}
     }
 
-    /* ===== Tạo PNG mã vạch cho KHỐI 8 ===== */
     function generateLabelBarcode(text,format,width,height,showText){
       return new Promise((resolve,reject)=>{
         try{
@@ -389,7 +388,6 @@
       });
     }
 
-    /* ===== Tab 2: tạo tem (9 khối) ===== */
     async function generateLabel(){
       const size=document.getElementById('labelSize').value;
 
@@ -398,7 +396,7 @@
       const frequencyRange=(document.getElementById('frequencyRange').value||'').trim();
       const gain=(document.getElementById('gain').value||'').trim();
       const barcodeText=(document.getElementById('labelBarcodeText').value||'').trim();
-      const dateRaw=document.getElementById('manufactureDate').value; // YYYY-MM-DD
+      const dateRaw=document.getElementById('manufactureDate').value;
       const dateDDMMYYYY = (function(d){
         if(!d) return '';
         const [y,m,day]=d.split('-'); return `${day}${m}${y}`;
@@ -420,53 +418,43 @@
         const grid=document.createElement('div');
         grid.className='label-canvas';
 
-        /* Khối 1 */
         const b1=document.createElement('div'); b1.className='b1';
         b1.innerHTML=`<div class="b1-inner"><img alt="logo" crossorigin="anonymous" src="https://i.postimg.cc/GmHBH7mz/LOGO-BLACK-EMPTY-2x.png"></div>`;
 
-        /* Khối 2 */
         const b2=document.createElement('div'); b2.className='b2';
         b2.innerHTML=`<div class="b2-inner"><div class="brand">Nextwaves</div></div>`;
 
-        /* Khối 3 */
         const b3=document.createElement('div'); b3.className='b3';
         b3.innerHTML=`<div class="b3-inner"><div class="product">${productName}</div></div>`;
 
-        /* Khối 4 */
         const b4=document.createElement('div'); b4.className='b4';
         b4.innerHTML=`<div class="b4-inner"><div class="tech">${technicalName}</div></div>`;
 
-        /* Khối 5 */
         const b5=document.createElement('div'); b5.className='b5';
         b5.innerHTML=`<div class="b5-inner">
-          <table>
-            <tr><th>DẢI TẦN</th><td>${frequencyRange}</td></tr>
-            <tr><th>ĐỘ LỢI</th><td>${gain}</td></tr>
-          </table>
+          <div class="spec-grid">
+            <div class="cell head">DẢI TẦN</div><div class="cell">${frequencyRange}</div>
+            <div class="cell head">ĐỘ LỢI</div><div class="cell">${gain}</div>
+          </div>
         </div>`;
 
-        /* Khối 6 */
         const b6=document.createElement('div'); b6.className='b6';
         b6.innerHTML=`<div class="b6-inner"><div class="company">
           Sản xuất bởi công ty TNHH Nextwaves Industries, 20/23 đường 35, Phường An Khánh, Thành Phố Hồ Chí Minh
         </div></div>`;
 
-        /* Khối 7 */
         const b7=document.createElement('div'); b7.className='b7';
         b7.innerHTML=`<div class="b7-inner"><div class="phone">0938888373</div></div>`;
 
-        /* Khối 8 */
         const b8=document.createElement('div'); b8.className='b8';
         b8.innerHTML=`<div class="b8-inner"><img src="${currentBarcodeDataURL}" alt="Barcode"></div>`;
 
-        /* Khối 9 */
         const b9=document.createElement('div'); b9.className='b9';
         b9.innerHTML=`<div class="b9-inner"><div class="madein">Made in Vietnam<span class="mfgdate">${dateDDMMYYYY}</span></div></div>`;
 
         grid.append(b1,b2,b3,b4,b5,b6,b7,b8,b9);
         labelPreview.innerHTML=''; labelPreview.appendChild(grid);
 
-        /* Cập nhật --h bằng chiều cao thật để font tự co giãn */
         const exactH = grid.clientHeight || 1000;
         grid.style.setProperty('--h', exactH+'px');
 
@@ -477,7 +465,6 @@
       }
     }
 
-    /* ===== In & PDF ===== */
     function printLabel(){
       const size=document.getElementById('labelSize').value;
       const styleId='print-page-style';
@@ -496,7 +483,7 @@
       if(!labelElement || !labelElement.innerHTML){alert('Vui lòng tạo tem trước khi tải xuống!');return;}
 
       const size=document.getElementById('labelSize').value;
-      const page = (size==='70x100') ? [70,100] : [30,40]; // mm
+      const page = (size==='70x100') ? [70,100] : [30,40];
 
       const { jsPDF } = window.jspdf;
       const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:page});
@@ -506,11 +493,6 @@
       pdf.addImage(imgData,'PNG',0,0,page[0],page[1]);
       pdf.save(`tem-${size}-${Date.now()}.pdf`);
     }
-
-    /* THEO YÊU CẦU:
-       - KHÔNG gán sự kiện input tự động cập nhật.
-       - KHÔNG tự động gọi generateLabel khi chưa bấm nút.
-    */
   </script>
 </body>
 </html>

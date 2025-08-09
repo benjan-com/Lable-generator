@@ -81,8 +81,9 @@
         7%  /* b9 */
         2%  /* bottom */
       ;
-      padding-left:10px;
-      --h:1000px; /* set sau khi render */
+      padding-left:10px;        /* mép trái giữ nguyên */
+      padding-right:15px;       /* mép phải lùi vào thêm 5px như yêu cầu */
+      --h:1000px;               /* set sau khi render */
       overflow:hidden;
     }
 
@@ -91,12 +92,16 @@
     .b1-inner{width:100%;height:100%;padding-top:1px;padding-bottom:1px}
     .b1-inner img{max-width:100%;max-height:100%;object-fit:contain;display:block;margin:0 auto}
 
-    /* KHỐI 2: thương hiệu, 3% chiều cao -> cỡ chữ ~70% chiều cao hàng */
+    /* KHỐI 2: tên công ty dưới logo */
     .b2{grid-row:4;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
     .b2-inner{width:100%;height:100%}
-    .b2-inner .brand{font-weight:700;font-size:calc(var(--h)*0.021);line-height:1.05;white-space:nowrap}
+    .b2-inner .brand{
+      font-weight:700;
+      font-size:calc(var(--h)*0.018);   /* nhỏ hơn để không đè b3 */
+      line-height:1.05;white-space:nowrap;letter-spacing:.5px
+    }
 
-    /* KHỐI 3: sản phẩm, 4% -> ~75% chiều cao hàng */
+    /* KHỐI 3: sản phẩm */
     .b3{grid-row:6;display:flex;align-items:center;justify-content:flex-start;text-align:left;overflow:hidden}
     .b3-inner{width:100%;height:100%}
     .b3-inner .product{
@@ -104,29 +109,34 @@
       white-space:nowrap;overflow:hidden;text-overflow:ellipsis
     }
 
-    /* KHỐI 4: kỹ thuật, 3% */
+    /* KHỐI 4: kỹ thuật */
     .b4{grid-row:8;display:flex;align-items:center;justify-content:flex-start;text-align:left;overflow:hidden}
     .b4-inner{width:100%;height:100%}
     .b4-inner .tech{font-weight:800;font-size:calc(var(--h)*0.022);line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    /* KHỐI 5: chuyển sang grid 2x2, luôn kín 100% khối */
+    /* KHỐI 5: grid 2x2, hai cột bằng nhau, viền 2px */
     .b5{grid-row:10;display:flex;align-items:stretch}
     .b5-inner{width:100%;height:100%;padding:0}
     .spec-grid{
       display:grid;width:100%;height:100%;
-      grid-template-columns:auto 1fr;
+      grid-template-columns:1fr 1fr;   /* hai cột bằng nhau */
       grid-template-rows:1fr 1fr;
       border:2px solid #000
     }
-    .cell{display:flex;align-items:center;padding:2px 4px;font-weight:700;font-size:calc(var(--h)*0.018);line-height:1.1;border:1.5px solid #000}
+    .cell{
+      display:flex;align-items:center;
+      padding:2px 4px;font-weight:700;
+      font-size:calc(var(--h)*0.018);line-height:1.1;
+      border:2px solid #000               /* tất cả nét 2px */
+    }
     .cell.head{background:#f3f4f6}
 
-    /* KHỐI 6: thông tin công ty, 5% -> ~60% chiều cao hàng */
-    .b6{grid-row:12;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+    /* KHỐI 6: thông tin công ty căn trái */
+    .b6{grid-row:12;display:flex;align-items:center;justify-content:flex-start;text-align:left;overflow:hidden}
     .b6-inner{width:100%;height:100%}
     .b6-inner .company{font-size:calc(var(--h)*0.018);line-height:1.2}
 
-    /* KHỐI 7: điện thoại, 3% */
+    /* KHỐI 7: điện thoại */
     .b7{grid-row:14;display:flex;align-items:center;justify-content:flex-start;text-align:left;overflow:hidden}
     .b7-inner{width:100%;height:100%}
     .b7-inner .phone{font-weight:800;font-size:calc(var(--h)*0.024);line-height:1.05;white-space:nowrap}
@@ -136,11 +146,15 @@
     .b8-inner{width:100%;height:100%}
     .b8-inner img{width:100%;height:100%;object-fit:contain;display:block;margin:0 auto}
 
-    /* KHỐI 9: Made in + ngày, 7% */
+    /* KHỐI 9: Made in + ngày có cùng cỡ chữ, nhỏ hơn để không bị cắt */
     .b9{grid-row:18;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
     .b9-inner{width:100%;height:100%}
-    .b9-inner .madein{font-weight:700;font-size:calc(var(--h)*0.049);line-height:1.1}
-    .b9-inner .mfgdate{display:block;font-weight:600;font-size:calc(var(--h)*0.022)}
+    .b9-inner .madein,
+    .b9-inner .mfgdate{
+      font-weight:700;                 /* cùng trọng lượng cho đồng nhất thị giác */
+      font-size:calc(var(--h)*0.028);  /* hai dòng cộng line-height < 7% chiều cao */
+      line-height:1.05
+    }
 
     #barcodeCanvas,#labelBarcodeCanvas{display:none}
 
@@ -173,6 +187,7 @@
       <button class="tab" onclick="switchTab('label')">🏷️ Tạo Tem Sản Phẩm</button>
     </div>
 
+    <!-- TAB 1 -->
     <div id="barcode-tab" class="tab-content active">
       <div class="form-row">
         <div class="form-group">
@@ -220,6 +235,7 @@
       </div>
     </div>
 
+    <!-- TAB 2 -->
     <div id="label-tab" class="tab-content">
       <div class="form-group">
         <label for="labelSize">📏 Kích thước tem:</label>
@@ -400,7 +416,7 @@
       const dateDDMMYYYY = (function(d){
         if(!d) return '';
         const [y,m,day]=d.split('-'); return `${day}${m}${y}`;
-      })(dateRaw);
+      })(d ateRaw);
 
       const barcodeFormat=document.getElementById('labelBarcodeFormat').value;
       const barcodeWidth=parseFloat(document.getElementById('labelBarcodeWidth').value||'2');
@@ -422,7 +438,7 @@
         b1.innerHTML=`<div class="b1-inner"><img alt="logo" crossorigin="anonymous" src="https://i.postimg.cc/GmHBH7mz/LOGO-BLACK-EMPTY-2x.png"></div>`;
 
         const b2=document.createElement('div'); b2.className='b2';
-        b2.innerHTML=`<div class="b2-inner"><div class="brand">Nextwaves</div></div>`;
+        b2.innerHTML=`<div class="b2-inner"><div class="brand">NEXTWAVES INDUSTRIES</div></div>`;
 
         const b3=document.createElement('div'); b3.className='b3';
         b3.innerHTML=`<div class="b3-inner"><div class="product">${productName}</div></div>`;
@@ -450,7 +466,10 @@
         b8.innerHTML=`<div class="b8-inner"><img src="${currentBarcodeDataURL}" alt="Barcode"></div>`;
 
         const b9=document.createElement('div'); b9.className='b9';
-        b9.innerHTML=`<div class="b9-inner"><div class="madein">Made in Vietnam<span class="mfgdate">${dateDDMMYYYY}</span></div></div>`;
+        b9.innerHTML=`<div class="b9-inner">
+          <div class="madein">Made in Vietnam</div>
+          <span class="mfgdate">${dateDDMMYYYY}</span>
+        </div>`;
 
         grid.append(b1,b2,b3,b4,b5,b6,b7,b8,b9);
         labelPreview.innerHTML=''; labelPreview.appendChild(grid);

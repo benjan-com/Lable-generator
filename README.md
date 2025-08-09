@@ -118,13 +118,13 @@ input[type="checkbox"]{margin-right:8px;transform:scale(1.2)}
   display:grid;width:100%;height:100%;
   grid-template-columns:1fr 1fr;   /* hai cột bằng nhau */
   grid-template-rows:1fr 1fr;
-  border:2px solid #000
+  border:1px solid #000
 }
 .cell{
   display:flex;align-items:center;
-  padding:2px 4px;font-weight:700;
-  font-size:calc(var(--h)*0.018);line-height:1.1;
-  border:2px solid #000               /* tất cả nét 2px */
+  padding:4px 6px;font-weight:700;
+  font-size:calc(var(--h)*0.022);line-height:1.1;
+  border:1px solid #000               /* tất cả nét 2px */
 }
 .cell.head{background:#f3f4f6}
 
@@ -145,11 +145,11 @@ input[type="checkbox"]{margin-right:8px;transform:scale(1.2)}
 
 /* KHỐI 9: Made in + ngày có cùng cỡ chữ, nhỏ hơn để không bị cắt */
 .b9{grid-row:18;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
-.b9-inner{width:100%;height:100%}
+.b9-inner{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .b9-inner .madein,
 .b9-inner .mfgdate{
   font-weight:700;                 /* cùng trọng lượng cho đồng nhất thị giác */
-  font-size:calc(var(--h)*0.028);  /* hai dòng cộng line-height < 7% chiều cao */
+  font-size:calc(var(--h)*0.024);  /* hai dòng cộng line-height < 7% chiều cao */
   line-height:1.05
 }
 

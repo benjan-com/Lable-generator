@@ -21,7 +21,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
         }
         .header {
@@ -49,13 +49,14 @@
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
         .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; font-size: 0.95rem; }
+
         input[type="text"], input[type="number"], select {
             width: 100%; padding: 12px 16px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem;
             transition: border-color 0.3s ease; background: white;
         }
         input[type="text"]::placeholder { color: #999; }
         input[type="text"]:focus, input[type="number"]:focus, select:focus {
-            outline: none; border-color: #007bff; box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+            outline: none; border-color: #007bff; box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
         }
         input[type="checkbox"] { margin-right: 8px; transform: scale(1.2); }
         .checkbox-group { display: flex; align-items: center; margin-top: 10px; }
@@ -63,18 +64,18 @@
         .btn {
             background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             color: white; padding: 14px 28px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600;
-            cursor: pointer; transition: all 0.3s ease; margin: 8px; box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+            cursor: pointer; transition: all 0.3s ease; margin: 8px; box-shadow: 0 4px 15px rgba(0,123,255,0.3);
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4); }
-        .btn-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
-        .btn-success:hover { box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4); }
-        .btn-danger { background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%); box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3); }
-        .btn-danger:hover { box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,123,255,0.4); }
+        .btn-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); box-shadow: 0 4px 15px rgba(40,167,69,0.3); }
+        .btn-success:hover { box-shadow: 0 6px 20px rgba(40,167,69,0.4); }
+        .btn-danger { background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%); box-shadow: 0 4px 15px rgba(220,53,69,0.3); }
+        .btn-danger:hover { box-shadow: 0 6px 20px rgba(220,53,69,0.4); }
 
         .result-section { margin-top: 30px; padding: 30px; background: #f8f9fa; border-radius: 12px; text-align: center; }
         .barcode-container { background: white; padding: 30px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: inline-block; }
 
-        /* Label Preview: đúng 350x500 hoặc 150x200, dựng 9 khối */
+        /* Xem trước tem: đúng 350x500 hoặc 150x200, bố cục 9 khối */
         .label-preview {
             background: white; border: 2px dashed #999; margin: 20px auto; font-family: Arial, sans-serif;
             position: relative; display: inline-block; overflow: hidden;
@@ -89,7 +90,7 @@
             row-gap: 1%;
             padding-top: 2%;
             padding-bottom: 2%;
-            padding-left: 10px; /* tất cả khối cách mép trái 10px */
+            padding-left: 10px;
             padding-right: 0;
         }
         .block { padding: 5px; overflow: hidden; display: flex; align-items: center; }
@@ -97,13 +98,9 @@
         .left { justify-content: flex-start; text-align: left; }
         .bold { font-weight: 700; }
 
-        .brand-logo, .barcode-img {
-            width: 100%; height: 100%; object-fit: contain; display: block;
-        }
+        .brand-logo, .barcode-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
-        .spec-table {
-            width: 100%; height: 100%; border-collapse: collapse; table-layout: fixed;
-        }
+        .spec-table { width: 100%; height: 100%; border-collapse: collapse; table-layout: fixed; }
         .spec-table th, .spec-table td {
             border: 1px solid #000; padding: 4px; text-align: left; vertical-align: middle;
             overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -286,7 +283,6 @@
     <canvas id="labelBarcodeCanvas" style="display: none;"></canvas>
 
     <script>
-        // Global variables
         let currentTab = 'barcode';
         let currentBarcodeDataURL = '';
 
@@ -303,7 +299,6 @@
             }
         }
 
-        // Barcode tab
         function generateBarcode() {
             const text = document.getElementById('barcodeInput').value;
             const format = document.getElementById('barcodeFormat').value;
@@ -311,27 +306,21 @@
             const height = parseInt(document.getElementById('barcodeHeight').value);
             const showText = document.getElementById('showText').checked;
 
-            if (!text) {
-                alert('Vui lòng nhập dãy số!');
-                return;
-            }
+            if (!text) { alert('Vui lòng nhập dãy số!'); return; }
             try {
                 JsBarcode("#barcodeDisplay", text, {
-                    format: format, width: width, height: height, displayValue: showText,
+                    format, width, height, displayValue: showText,
                     background: "#ffffff", lineColor: "#000000", margin: 10, fontSize: 14, textAlign: "center", textPosition: "bottom"
                 });
                 document.getElementById('barcodeResult').style.display = 'block';
             } catch (error) {
-                alert('Lỗi tạo mã vạch: ' + error.message);
+                alert('Lỗi tạo mã vạch: ' + (error && error.message ? error.message : 'không xác định'));
             }
         }
 
         function downloadBarcode() {
             const barcodeElement = document.getElementById('barcodeDisplay');
-            if (!barcodeElement || !barcodeElement.innerHTML) {
-                alert('Vui lòng tạo mã vạch trước khi tải xuống!');
-                return;
-            }
+            if (!barcodeElement || !barcodeElement.innerHTML) { alert('Vui lòng tạo mã vạch trước khi tải xuống!'); return; }
             try {
                 const svgElement = barcodeElement;
                 const svgData = new XMLSerializer().serializeToString(svgElement);
@@ -343,47 +332,38 @@
                     ctx.fillStyle = 'white'; ctx.fillRect(0, 0, canvas.width, canvas.height);
                     ctx.drawImage(img, 0, 0);
                     canvas.toBlob(function(blob) {
-                        if (blob.size > 0) {
+                        if (blob && blob.size > 0) {
                             const link = document.createElement('a');
                             link.download = `ma-vach-${document.getElementById('barcodeInput').value}-${Date.now()}.png`;
                             link.href = URL.createObjectURL(blob);
                             document.body.appendChild(link); link.click(); document.body.removeChild(link);
                             URL.revokeObjectURL(link.href);
-                        } else {
-                            alert('Lỗi tạo file. Vui lòng thử lại!');
-                        }
+                        } else { alert('Lỗi tạo file. Vui lòng thử lại!'); }
                     }, 'image/png');
                 };
                 img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
             } catch (error) {
-                alert('Lỗi tải xuống: ' + error.message);
+                alert('Lỗi tải xuống: ' + (error && error.message ? error.message : 'không xác định'));
             }
         }
 
-        // Label: barcode image as PNG
         function generateLabelBarcode(text, format, width, height) {
             return new Promise((resolve, reject) => {
                 try {
                     const canvas = document.getElementById('labelBarcodeCanvas');
-                    JsBarcode(canvas, text || ' ', {
-                        format: format, width: width, height: height,
-                        displayValue: false, background: "#ffffff", lineColor: "#000000",
-                        margin: 0, textAlign: "center", textPosition: "bottom"
-                    });
+                    JsBarcode(canvas, text, { format, width, height, displayValue: false, background: "#ffffff", lineColor: "#000000", margin: 0 });
                     resolve(canvas.toDataURL('image/png'));
                 } catch (error) { reject(error); }
             });
         }
 
-        // Utility: tăng cỡ chữ tối đa nhưng vừa với khối
         function adjustTextToFit(el, minPx = 6, maxPx = 200) {
             if (!el) return;
             const parent = el.parentElement;
-            const maxH = Math.max(1, parent.clientHeight - 10); // trừ padding 5px trên dưới
+            const maxH = Math.max(1, parent.clientHeight - 10);
             let size = minPx;
             el.style.lineHeight = '1.1';
             el.style.whiteSpace = 'nowrap';
-            // tăng dần tới khi tràn
             while (size <= maxPx) {
                 el.style.fontSize = size + 'px';
                 if (el.scrollHeight > maxH) { size--; break; }
@@ -391,7 +371,6 @@
             }
             if (size < minPx) size = minPx;
             el.style.fontSize = size + 'px';
-            // nếu vẫn tràn thì giảm dần
             while (el.scrollHeight > maxH && size > minPx) {
                 size--; el.style.fontSize = size + 'px';
             }
@@ -407,7 +386,6 @@
             }
         }
 
-        // Generate label with 9 blocks
         async function generateLabel() {
             const size = document.getElementById('labelSize').value;
             const productName = document.getElementById('productName').value || '';
@@ -415,10 +393,15 @@
             const frequencyRange = document.getElementById('frequencyRange').value || '';
             const gain = document.getElementById('gain').value || '';
             const barcodeText = document.getElementById('labelBarcodeText').value || '';
-
             const barcodeFormat = document.getElementById('labelBarcodeFormat').value;
             const barcodeWidth = parseFloat(document.getElementById('labelBarcodeWidth').value);
             const barcodeHeight = parseInt(document.getElementById('labelBarcodeHeight').value);
+
+            if (!barcodeText) { alert('Vui lòng nhập mã vạch.'); return; }
+            if (barcodeFormat === 'EAN13' && !/^\d{13}$/.test(barcodeText)) {
+                alert('Vui lòng nhập mã vạch EAN-13 gồm 13 chữ số.');
+                return;
+            }
 
             try {
                 currentBarcodeDataURL = await generateLabelBarcode(barcodeText, barcodeFormat, barcodeWidth, barcodeHeight);
@@ -427,35 +410,28 @@
                 const previewClass = (size === '70x100') ? 'label-350x500' : 'label-150x200';
                 labelPreview.className = `label-preview ${previewClass}`;
 
-                // 9 khối đúng nội dung yêu cầu
                 labelPreview.innerHTML = `
                     <div class="label-content">
-                        <!-- Khối 1: logo thương hiệu -->
                         <div class="block center" id="khoi1">
                             <img class="brand-logo" alt="Logo thương hiệu"
                                  src="https://i.postimg.cc/GmHBH7mz/LOGO-BLACK-EMPTY-2x.png"
                                  onerror="this.style.display='none'">
                         </div>
-                        <!-- Khối 2: tên thương hiệu -->
                         <div class="block center" id="khoi2">
                             <div class="brandName">Nextwaves</div>
                         </div>
-                        <!-- Khối 3: tên sản phẩm (in đậm) -->
                         <div class="block left" id="khoi3">
                             <div class="productName bold">${productName}</div>
                         </div>
-                        <!-- Khối 4: tên kỹ thuật (in đậm) -->
                         <div class="block left" id="khoi4">
                             <div class="technicalName bold">${technicalName}</div>
                         </div>
-                        <!-- Khối 5: bảng thông số kỹ thuật (2 cột, căn trái) -->
                         <div class="block left" id="khoi5">
                             <table class="spec-table" id="specTable">
                                 <tr><th style="width:40%">Dải tần</th><td style="width:60%">${frequencyRange}</td></tr>
                                 <tr><th>Độ lợi</th><td>${gain}</td></tr>
                             </table>
                         </div>
-                        <!-- Khối 6: thông tin công ty -->
                         <div class="block left" id="khoi6">
                             <div class="companyInfo">
                                 Sản xuất bởi công ty TNHH Nextwaves Industries<br>
@@ -463,25 +439,18 @@
                                 Thành Phố Hồ Chí Minh
                             </div>
                         </div>
-                        <!-- Khối 7: số điện thoại công ty (in đậm) -->
                         <div class="block left" id="khoi7">
                             <div class="phone bold">0938888373</div>
                         </div>
-                        <!-- Khối 8: mã vạch -->
                         <div class="block center" id="khoi8">
                             <img src="${currentBarcodeDataURL}" class="barcode-img" alt="Barcode">
                         </div>
-                        <!-- Khối 9: made in vietnam + năm sản xuất (xuống dòng) -->
                         <div class="block center" id="khoi9">
-                            <div class="madeIn">
-                                Made in Vietnam<br>
-                                Năm sản xuất: 2025
-                            </div>
+                            <div class="madeIn">Made in Vietnam<br>Năm sản xuất: 2025</div>
                         </div>
                     </div>
                 `;
 
-                // Tự tăng cỡ chữ tối đa trong giới hạn khối
                 adjustTextToFit(document.querySelector('#khoi2 .brandName'), 8, 200);
                 adjustTextToFit(document.querySelector('#khoi3 .productName'), 8, 200);
                 adjustTextToFit(document.querySelector('#khoi4 .technicalName'), 8, 200);
@@ -492,19 +461,15 @@
 
                 document.getElementById('labelResult').style.display = 'block';
             } catch (error) {
-                console.error('Label generation error:', error);
-                alert('Lỗi tạo tem: ' + error.message);
+                alert('Lỗi tạo tem: ' + (error && error.message ? error.message : 'không xác định'));
             }
         }
 
         function downloadLabelPDF() {
             const labelElement = document.getElementById('labelPreview');
-            if (!labelElement || !labelElement.innerHTML) {
-                alert('Vui lòng tạo tem trước khi tải xuống!');
-                return;
-            }
+            if (!labelElement || !labelElement.innerHTML) { alert('Vui lòng tạo tem trước khi tải xuống!'); return; }
             const size = document.getElementById('labelSize').value;
-            const page = (size === '70x100') ? [350, 500] : [150, 200]; // mm
+            const page = (size === '70x100') ? [350, 500] : [150, 200];
 
             html2canvas(labelElement, { backgroundColor: null, scale: 4, useCORS: true })
                 .then(canvas => {
@@ -514,21 +479,13 @@
                     pdf.addImage(imgData, 'PNG', 0, 0, page[0], page[1], undefined, 'FAST');
                     pdf.save(`tem-${size}-${Date.now()}.pdf`);
                 })
-                .catch(e => alert('Lỗi tạo PDF: ' + e.message));
+                .catch(e => alert('Lỗi tạo PDF: ' + (e && e.message ? e.message : 'không xác định')));
         }
 
         function printLabel() { window.print(); }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Không tự điền giá trị để tránh "tự hoàn thiện"; không gọi generateLabel mặc định
-        });
-
-        document.querySelectorAll('input, select').forEach(input => {
-            input.addEventListener('input', function() {
-                if (currentTab === 'barcode') { /* không tự hoàn thiện nếu thiếu dữ liệu */ }
-                else { generateLabel(); }
-            });
-        });
+        // Không tự gọi generateLabel hay generateBarcode khi tải trang
+        document.addEventListener('DOMContentLoaded', function() {});
     </script>
 </body>
 </html>

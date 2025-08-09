@@ -1,4 +1,32 @@
 <!DOCTYPE html>
+<!--
+XÁC NHẬN THAY ĐỔI (đã chỉnh sửa theo yêu cầu)
+1) MỌI Ô NHẬP LIỆU trên cả 2 tab chỉ có placeholder mờ, KHÔNG đặt sẵn value. Khi bấm vào, placeholder tự biến mất theo mặc định của trình duyệt.
+2) ĐÃ BỎ việc gán sự kiện input cho toàn trang và KHÔNG tự động gọi generateLabel khi người dùng chưa bấm nút "Tạo Tem Sản Phẩm". Cũng KHÔNG tự gọi generateBarcode khi tải trang.
+3) Xem trước tem đúng 2 kích thước: 350×500 px (khi chọn 70×100) và 150×200 px (khi chọn 30×40).
+4) Bố cục tem theo CHIỀU DỌC 9 KHỐI:
+   - Tổng chiều cao = 100% tem; khối 1 cách mép trên 2%, khối 9 cách mép dưới 2%; MỖI KHỐI CÁCH NHAU 1%.
+   - Cao các khối theo %: 12%, 3%, 5%, 5%, 15%, 14%, 3%, 25%, 5%.
+   - Tất cả khối cách mép TRÁI 10px.
+   - Phần tử bên trong MỖI KHỐI cách bốn mép 5px, ẢNH tự co giãn, TEXT tự điều chỉnh cỡ chữ tối đa để vừa khối.
+   - Riêng phần tử KHỐI 1 chỉ cách mép TRÊN & DƯỚI 1px (không yêu cầu căn theo trái/phải).
+   - Căn lề: khối 1,2,8,9 căn giữa; khối còn lại căn trái.
+   - Khối 5 là BẢNG 2 CỘT, căn trái.
+5) Xuất PDF: CHỤP ẢNH TOÀN BỘ DOM tem và dán lên PDF; chỉ 2 khổ PDF:
+   - 350×500 mm nếu chọn 70×100
+   - 150×200 mm nếu chọn 30×40
+   → BỎ HOÀN TOÀN A4 và đa tem.
+6) NỘI DUNG TỪNG KHỐI:
+   1) Logo thương hiệu
+   2) Tên thương hiệu
+   3) Tên sản phẩm (đậm)
+   4) Tên kỹ thuật (đậm)
+   5) Bảng thông số 2 cột (Dải tần / Độ lợi)
+   6) Thông tin công ty
+   7) Số điện thoại công ty (đậm)
+   8) Mã vạch
+   9) Made in Vietnam + Năm sản xuất (xuống dòng)
+-->
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +40,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100% );
             min-height: 100vh;
             padding: 20px;
         }
@@ -21,7 +49,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
         .header {
@@ -48,15 +76,15 @@
         .form-group { margin-bottom: 25px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
         .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; font-size: 0.95rem; }
 
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; font-size: 0.95rem; }
         input[type="text"], input[type="number"], select {
-            width: 100%; padding: 12px 16px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem;
-            transition: border-color 0.3s ease; background: white;
+            width: 100%; padding: 12px 16px; border: 2px solid #e9ecef; border-radius: 8px;
+            font-size: 1rem; transition: border-color 0.3s ease; background: white;
         }
         input[type="text"]::placeholder { color: #999; }
         input[type="text"]:focus, input[type="number"]:focus, select:focus {
-            outline: none; border-color: #007bff; box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+            outline: none; border-color: #007bff; box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
         input[type="checkbox"] { margin-right: 8px; transform: scale(1.2); }
         .checkbox-group { display: flex; align-items: center; margin-top: 10px; }
@@ -64,40 +92,36 @@
         .btn {
             background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             color: white; padding: 14px 28px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600;
-            cursor: pointer; transition: all 0.3s ease; margin: 8px; box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+            cursor: pointer; transition: all 0.3s ease; margin: 8px; box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,123,255,0.4); }
-        .btn-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); box-shadow: 0 4px 15px rgba(40,167,69,0.3); }
-        .btn-success:hover { box-shadow: 0 6px 20px rgba(40,167,69,0.4); }
-        .btn-danger { background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%); box-shadow: 0 4px 15px rgba(220,53,69,0.3); }
-        .btn-danger:hover { box-shadow: 0 6px 20px rgba(220,53,69,0.4); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4); }
+        .btn-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
+        .btn-success:hover { box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4); }
+        .btn-danger { background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%); box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3); }
+        .btn-danger:hover { box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4); }
 
         .result-section { margin-top: 30px; padding: 30px; background: #f8f9fa; border-radius: 12px; text-align: center; }
-        .barcode-container { background: white; padding: 30px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: inline-block; }
+        .barcode-container { background: white; padding: 30px; border-radius: 12px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); display: inline-block; }
 
-        /* Xem trước tem: đúng 350x500 hoặc 150x200, bố cục 9 khối */
-        .label-preview {
-            background: white; border: 2px dashed #999; margin: 20px auto; font-family: Arial, sans-serif;
-            position: relative; display: inline-block; overflow: hidden;
-        }
+        /* XEM TRƯỚC TEM: chỉ 2 khổ 350x500 & 150x200 */
+        .label-preview { background: white; border: 2px dashed #999; margin: 20px auto; font-family: Arial, sans-serif; position: relative; display: inline-block; overflow: hidden; }
         .label-350x500 { width: 350px; height: 500px; }
         .label-150x200 { width: 150px; height: 200px; }
 
+        /* LƯỚI 9 KHỐI theo % + khoảng cách + mép trái 10px, trên 2%, dưới 2% */
         .label-content {
             position: absolute; inset: 0;
             display: grid;
             grid-template-rows: 12% 3% 5% 5% 15% 14% 3% 25% 5%;
             row-gap: 1%;
-            padding-top: 2%;
-            padding-bottom: 2%;
-            padding-left: 10px;
-            padding-right: 0;
+            padding-top: 2%; padding-bottom: 2%;
+            padding-left: 10px; padding-right: 0;
         }
-        .block { padding: 5px; overflow: hidden; display: flex; align-items: center; }
+        .block { padding: 5px; overflow: hidden; display: flex; align-items: center; height: 100%; }
+        #khoi1 { padding-top: 1px; padding-bottom: 1px; padding-left: 0; padding-right: 0; }
         .center { justify-content: center; text-align: center; }
         .left { justify-content: flex-start; text-align: left; }
         .bold { font-weight: 700; }
-
         .brand-logo, .barcode-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
         .spec-table { width: 100%; height: 100%; border-collapse: collapse; table-layout: fixed; }
@@ -135,7 +159,6 @@
             <h1>🏷️ Nextwaves Industries</h1>
             <p>Tạo Mã Vạch & Tem Sản Phẩm Chuyên Nghiệp</p>
         </div>
-
         <div class="tabs">
             <button class="tab active" onclick="switchTab('barcode')">📊 Tạo Mã Vạch</button>
             <button class="tab" onclick="switchTab('label')">🏷️ Tạo Tem Sản Phẩm</button>
@@ -160,7 +183,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="form-row-3">
                 <div class="form-group">
                     <label for="barcodeWidth">📏 Độ rộng thanh:</label>
@@ -178,12 +200,10 @@
                     </div>
                 </div>
             </div>
-
             <div style="text-align: center;">
                 <button class="btn" onclick="generateBarcode()">🎯 Tạo Mã Vạch</button>
                 <button class="btn btn-success" onclick="downloadBarcode()">📥 Tải xuống PNG</button>
             </div>
-
             <div id="barcodeResult" class="result-section" style="display: none;">
                 <h3>✅ Mã vạch đã được tạo thành công!</h3>
                 <div class="barcode-container">
@@ -201,7 +221,6 @@
                     <option value="30x40">30 x 40 mm (Kích thước nhỏ)</option>
                 </select>
             </div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label for="productName">🏷️ Tên sản phẩm:</label>
@@ -212,7 +231,6 @@
                     <input type="text" id="technicalName" placeholder="VD: RA-UL-SFF-241401">
                 </div>
             </div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label for="frequencyRange">📡 Dải tầng:</label>
@@ -223,7 +241,6 @@
                     <input type="text" id="gain" placeholder="VD: 7.5 dBi">
                 </div>
             </div>
-
             <div class="form-group">
                 <label for="labelBarcodeText">📊 Mã vạch (EAN-13):</label>
                 <input type="text" id="labelBarcodeText" placeholder="VD: 8936236710036">
@@ -247,7 +264,6 @@
                     <input type="number" id="labelBarcodeWidth" min="1" max="5" step="0.1" value="2">
                 </div>
             </div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label for="labelBarcodeHeight">📐 Chiều cao (px):</label>
@@ -283,9 +299,11 @@
     <canvas id="labelBarcodeCanvas" style="display: none;"></canvas>
 
     <script>
+        // Trạng thái
         let currentTab = 'barcode';
         let currentBarcodeDataURL = '';
 
+        // Chuyển tab
         function switchTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -299,13 +317,13 @@
             }
         }
 
+        // Tạo mã vạch (tab 1)
         function generateBarcode() {
             const text = document.getElementById('barcodeInput').value;
             const format = document.getElementById('barcodeFormat').value;
             const width = parseFloat(document.getElementById('barcodeWidth').value);
             const height = parseInt(document.getElementById('barcodeHeight').value);
             const showText = document.getElementById('showText').checked;
-
             if (!text) { alert('Vui lòng nhập dãy số!'); return; }
             try {
                 JsBarcode("#barcodeDisplay", text, {
@@ -318,6 +336,7 @@
             }
         }
 
+        // Tải PNG mã vạch
         function downloadBarcode() {
             const barcodeElement = document.getElementById('barcodeDisplay');
             if (!barcodeElement || !barcodeElement.innerHTML) { alert('Vui lòng tạo mã vạch trước khi tải xuống!'); return; }
@@ -347,6 +366,7 @@
             }
         }
 
+        // Tạo ảnh mã vạch cho tem (không chèn text để chủ động bố cục)
         function generateLabelBarcode(text, format, width, height) {
             return new Promise((resolve, reject) => {
                 try {
@@ -357,7 +377,8 @@
             });
         }
 
-        function adjustTextToFit(el, minPx = 6, maxPx = 200) {
+        // Thu phóng chữ để vừa khối
+        function fitText(el, minPx = 6, maxPx = 200) {
             if (!el) return;
             const parent = el.parentElement;
             const maxH = Math.max(1, parent.clientHeight - 10);
@@ -375,7 +396,7 @@
                 size--; el.style.fontSize = size + 'px';
             }
         }
-        function adjustTableToFit(tableEl, minPx = 6, startPx = 16) {
+        function fitTable(tableEl, minPx = 6, startPx = 16) {
             if (!tableEl) return;
             const parent = tableEl.parentElement;
             const maxH = Math.max(1, parent.clientHeight - 10);
@@ -386,6 +407,7 @@
             }
         }
 
+        // Tạo tem (9 khối)
         async function generateLabel() {
             const size = document.getElementById('labelSize').value;
             const productName = document.getElementById('productName').value || '';
@@ -396,12 +418,10 @@
             const barcodeFormat = document.getElementById('labelBarcodeFormat').value;
             const barcodeWidth = parseFloat(document.getElementById('labelBarcodeWidth').value);
             const barcodeHeight = parseInt(document.getElementById('labelBarcodeHeight').value);
+            const showText = document.getElementById('labelShowText').checked;
 
             if (!barcodeText) { alert('Vui lòng nhập mã vạch.'); return; }
-            if (barcodeFormat === 'EAN13' && !/^\d{13}$/.test(barcodeText)) {
-                alert('Vui lòng nhập mã vạch EAN-13 gồm 13 chữ số.');
-                return;
-            }
+            if (barcodeFormat === 'EAN13' && !/^\d{13}$/.test(barcodeText)) { alert('Vui lòng nhập mã vạch EAN-13 gồm 13 chữ số.'); return; }
 
             try {
                 currentBarcodeDataURL = await generateLabelBarcode(barcodeText, barcodeFormat, barcodeWidth, barcodeHeight);
@@ -412,26 +432,26 @@
 
                 labelPreview.innerHTML = `
                     <div class="label-content">
+                        <!-- Khối 1: Logo thương hiệu -->
                         <div class="block center" id="khoi1">
                             <img class="brand-logo" alt="Logo thương hiệu"
                                  src="https://i.postimg.cc/GmHBH7mz/LOGO-BLACK-EMPTY-2x.png"
                                  onerror="this.style.display='none'">
                         </div>
-                        <div class="block center" id="khoi2">
-                            <div class="brandName">Nextwaves</div>
-                        </div>
-                        <div class="block left" id="khoi3">
-                            <div class="productName bold">${productName}</div>
-                        </div>
-                        <div class="block left" id="khoi4">
-                            <div class="technicalName bold">${technicalName}</div>
-                        </div>
+                        <!-- Khối 2: Tên thương hiệu -->
+                        <div class="block center" id="khoi2"><div class="brandName">Nextwaves</div></div>
+                        <!-- Khối 3: Tên sản phẩm (đậm) -->
+                        <div class="block left" id="khoi3"><div class="productName bold">${productName}</div></div>
+                        <!-- Khối 4: Tên kỹ thuật (đậm) -->
+                        <div class="block left" id="khoi4"><div class="technicalName bold">${technicalName}</div></div>
+                        <!-- Khối 5: Bảng thông số kỹ thuật 2 cột -->
                         <div class="block left" id="khoi5">
                             <table class="spec-table" id="specTable">
                                 <tr><th style="width:40%">Dải tần</th><td style="width:60%">${frequencyRange}</td></tr>
                                 <tr><th>Độ lợi</th><td>${gain}</td></tr>
                             </table>
                         </div>
+                        <!-- Khối 6: Thông tin công ty -->
                         <div class="block left" id="khoi6">
                             <div class="companyInfo">
                                 Sản xuất bởi công ty TNHH Nextwaves Industries<br>
@@ -439,25 +459,37 @@
                                 Thành Phố Hồ Chí Minh
                             </div>
                         </div>
-                        <div class="block left" id="khoi7">
-                            <div class="phone bold">0938888373</div>
-                        </div>
+                        <!-- Khối 7: Số điện thoại công ty (đậm) -->
+                        <div class="block left" id="khoi7"><div class="phone bold">0938888373</div></div>
+                        <!-- Khối 8: Mã vạch -->
                         <div class="block center" id="khoi8">
                             <img src="${currentBarcodeDataURL}" class="barcode-img" alt="Barcode">
                         </div>
+                        <!-- Khối 9: Made in Vietnam + Năm sản xuất -->
                         <div class="block center" id="khoi9">
                             <div class="madeIn">Made in Vietnam<br>Năm sản xuất: 2025</div>
                         </div>
                     </div>
                 `;
 
-                adjustTextToFit(document.querySelector('#khoi2 .brandName'), 8, 200);
-                adjustTextToFit(document.querySelector('#khoi3 .productName'), 8, 200);
-                adjustTextToFit(document.querySelector('#khoi4 .technicalName'), 8, 200);
-                adjustTableToFit(document.getElementById('specTable'), 6, 18);
-                adjustTextToFit(document.querySelector('#khoi6 .companyInfo'), 6, 200);
-                adjustTextToFit(document.querySelector('#khoi7 .phone'), 8, 200);
-                adjustTextToFit(document.querySelector('#khoi9 .madeIn'), 8, 200);
+                // Tự chỉnh cỡ chữ để vừa khối (sau khi người dùng bấm nút)
+                fitText(document.querySelector('#khoi2 .brandName'), 8, 200);
+                fitText(document.querySelector('#khoi3 .productName'), 8, 200);
+                fitText(document.querySelector('#khoi4 .technicalName'), 8, 200);
+                fitTable(document.getElementById('specTable'), 6, 18);
+                fitText(document.querySelector('#khoi6 .companyInfo'), 6, 200);
+                fitText(document.querySelector('#khoi7 .phone'), 8, 200);
+                fitText(document.querySelector('#khoi9 .madeIn'), 8, 200);
+
+                // Hiển thị số mã vạch (nếu bật)
+                if (showText) {
+                    const num = document.createElement('div');
+                    num.style.textAlign = 'center';
+                    num.style.fontSize = '12px';
+                    num.style.marginTop = '4px';
+                    num.textContent = formatBarcodeNumbers(barcodeText);
+                    document.getElementById('khoi8').appendChild(num);
+                }
 
                 document.getElementById('labelResult').style.display = 'block';
             } catch (error) {
@@ -465,11 +497,19 @@
             }
         }
 
+        function formatBarcodeNumbers(barcode) {
+            if (barcode.length >= 13) { return `${barcode[0]} ${barcode.substring(1, 7)} ${barcode.substring(7, 13)}`; }
+            return barcode;
+        }
+
+        function printLabel() { window.print(); }
+
+        // Xuất PDF: chụp ảnh toàn bộ DOM tem và dán vào PDF (chỉ 2 khổ)
         function downloadLabelPDF() {
             const labelElement = document.getElementById('labelPreview');
             if (!labelElement || !labelElement.innerHTML) { alert('Vui lòng tạo tem trước khi tải xuống!'); return; }
             const size = document.getElementById('labelSize').value;
-            const page = (size === '70x100') ? [350, 500] : [150, 200];
+            const page = (size === '70x100') ? [350, 500] : [150, 200]; // mm
 
             html2canvas(labelElement, { backgroundColor: null, scale: 4, useCORS: true })
                 .then(canvas => {
@@ -482,10 +522,9 @@
                 .catch(e => alert('Lỗi tạo PDF: ' + (e && e.message ? e.message : 'không xác định')));
         }
 
-        function printLabel() { window.print(); }
-
-        // Không tự gọi generateLabel hay generateBarcode khi tải trang
-        document.addEventListener('DOMContentLoaded', function() {});
+        // KHÔNG tự động gọi generateBarcode/generateLabel khi tải trang
+        document.addEventListener('DOMContentLoaded', function() { /* no auto actions */ });
+        // KHÔNG gán sự kiện input tự động cho toàn bộ form
     </script>
 </body>
 </html>

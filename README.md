@@ -14,6 +14,8 @@
       font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
       min-height:100vh;padding:20px;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
     }
     .container{max-width:1000px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,.1);overflow:hidden}
     .header{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:#fff;padding:30px 40px;text-align:center;position:relative}
@@ -50,10 +52,10 @@
     .result-section{margin-top:30px;padding:30px;background:#f8f9fa;border-radius:12px;text-align:center}
     .barcode-container{background:#fff;padding:30px;border-radius:12px;margin:20px 0;box-shadow:0 4px 15px rgba(0,0,0,.1);display:inline-block}
 
-    /* -------- XEM TRƯỚC TEM: chỉ 2 kích thước -------- */
-    .label-preview{background:#fff;border:2px dashed #999;margin:20px auto;font-family:Arial,sans-serif;position:relative;display:inline-block}
-    .label-70x100{width:350mm;height:500mm}   /* 70x100 -> 350x500 mm */
-    .label-30x40{width:150mm;height:200mm}    /* 30x40 -> 150x200 mm */
+    /* -------- XEM TRƯỚC TEM: đúng 2 kích thước thực tế -------- */
+    .label-preview{background:#fff;border:2px dashed #999;margin:20px auto;font-family:Arial,sans-serif;position:relative;display:inline-block;overflow:hidden}
+    .label-70x100{width:70mm;height:100mm}   /* đúng 70 x 100 mm */
+    .label-30x40{width:30mm;height:40mm}     /* đúng 30 x 40 mm */
 
     /* Lưới 9 khối + khoảng cách 1%, top 2%, bottom 2% */
     .label-canvas{
@@ -81,59 +83,60 @@
       ;
       padding-left:10px; /* mọi khối cách mép trái 10px */
       --h:1000px; /* chiều cao px thực tế, được set sau khi render */
+      overflow:hidden;
     }
 
-    /* KHỐI 1: logo – chỉ cách trên/dưới 1px, căn giữa */
+    /* KHỐI 1: logo */
     .b1{grid-row:2;display:flex;align-items:center;justify-content:center;text-align:center}
     .b1-inner{width:100%;height:100%;padding-top:1px;padding-bottom:1px}
     .b1-inner img{max-width:100%;max-height:100%;object-fit:contain;display:block;margin:0 auto}
 
-    /* KHỐI 2: tên thương hiệu – căn giữa */
+    /* KHỐI 2: tên thương hiệu */
     .b2{grid-row:4;display:flex;align-items:center;justify-content:center;text-align:center}
     .b2-inner{width:100%;height:100%;padding:5px 0}
-    .b2-inner .brand{font-weight:700;font-size:calc(var(--h)*0.035);line-height:1.05}
+    .b2-inner .brand{font-weight:700;font-size:clamp(8px, calc(var(--h)*0.035), 28px);line-height:1.05}
 
-    /* KHỐI 3: tên sản phẩm – đậm, căn trái */
+    /* KHỐI 3: tên sản phẩm */
     .b3{grid-row:6;display:flex;align-items:center;justify-content:flex-start;text-align:left}
     .b3-inner{width:100%;height:100%;padding:5px 0}
-    .b3-inner .product{font-weight:800;font-size:calc(var(--h)*0.045);line-height:1.05}
+    .b3-inner .product{font-weight:800;font-size:clamp(9px, calc(var(--h)*0.045), 32px);line-height:1.05}
 
-    /* KHỐI 4: tên kỹ thuật – đậm, căn trái */
+    /* KHỐI 4: tên kỹ thuật */
     .b4{grid-row:8;display:flex;align-items:center;justify-content:flex-start;text-align:left}
     .b4-inner{width:100%;height:100%;padding:5px 0}
-    .b4-inner .tech{font-weight:800;font-size:calc(var(--h)*0.035);line-height:1.05}
+    .b4-inner .tech{font-weight:800;font-size:clamp(8px, calc(var(--h)*0.035), 26px);line-height:1.05}
 
-    /* KHỐI 5: bảng thông số 2 cột, cao 100%, mỗi dòng = 50% */
-    .b5{grid-row:10;display:flex;align-items:center;justify-content:flex-start;text-align:left}
-    .b5-inner{width:100%;height:100%;padding:5px 0}
-    .b5-inner table{width:100%;height:100%;table-layout:fixed;border-collapse:collapse;border:2px solid #000}
+    /* KHỐI 5: bảng thông số 2 hàng chiếm 100% */
+    .b5{grid-row:10;display:flex;align-items:stretch;justify-content:flex-start;text-align:left}
+    .b5-inner{width:100%;height:100%;padding:0} /* bỏ padding để 100% không bị cộng dồn */
+    .b5-inner table{width:100%;height:100%;table-layout:fixed;border-collapse:collapse;border:2px solid #000;box-sizing:border-box}
     .b5-inner tr{height:50%}
     .b5-inner th,.b5-inner td{
-      border:1.5px solid #000;padding:2px 6px;vertical-align:middle;text-align:left;
-      font-weight:700;font-size:calc(var(--h)*0.018);line-height:1.1
+      border:1.5px solid #000;padding:2px 4px;vertical-align:middle;text-align:left;
+      font-weight:700;font-size:clamp(7px, calc(var(--h)*0.018), 16px);line-height:1.1
     }
     .b5-inner th{background:#f3f4f6}
 
-    /* KHỐI 6: thông tin công ty – căn trái */
-    .b6{grid-row:12;display:flex;align-items:center;justify-content:flex-start;text-align:left}
+    /* KHỐI 6: thông tin công ty căn giữa */
+    .b6{grid-row:12;display:flex;align-items:center;justify-content:center;text-align:center}
     .b6-inner{width:100%;height:100%;padding:5px 0}
-    .b6-inner .company{font-size:calc(var(--h)*0.02);line-height:1.2}
+    .b6-inner .company{font-size:clamp(7px, calc(var(--h)*0.02), 14px);line-height:1.2}
 
-    /* KHỐI 7: số điện thoại – đậm, căn trái */
+    /* KHỐI 7: số điện thoại */
     .b7{grid-row:14;display:flex;align-items:center;justify-content:flex-start;text-align:left}
     .b7-inner{width:100%;height:100%;padding:5px 0}
-    .b7-inner .phone{font-weight:800;font-size:calc(var(--h)*0.03);line-height:1.1}
+    .b7-inner .phone{font-weight:800;font-size:clamp(8px, calc(var(--h)*0.03), 18px);line-height:1.1}
 
-    /* KHỐI 8: mã vạch – căn giữa, ảnh tự co dãn */
-    .b8{grid-row:16;display:flex;align-items:center;justify-content:center;text-align:center}
+    /* KHỐI 8: mã vạch */
+    .b8{grid-row:16;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
     .b8-inner{width:100%;height:100%;padding:5px 0}
     .b8-inner img{width:100%;height:100%;object-fit:contain;display:block;margin:0 auto}
 
-    /* KHỐI 9: Made in Vietnam + ngày dạng DDMMYYYY – căn giữa */
+    /* KHỐI 9: Made in Vietnam + ngày */
     .b9{grid-row:18;display:flex;align-items:center;justify-content:center;text-align:center}
     .b9-inner{width:100%;height:100%;padding:5px 0}
-    .b9-inner .madein{font-weight:700;font-size:calc(var(--h)*0.03);line-height:1.15}
-    .b9-inner .mfgdate{display:block;font-weight:600;font-size:calc(var(--h)*0.02)}
+    .b9-inner .madein{font-weight:700;font-size:clamp(8px, calc(var(--h)*0.03), 18px);line-height:1.15}
+    .b9-inner .mfgdate{display:block;font-weight:600;font-size:clamp(7px, calc(var(--h)*0.02), 14px)}
 
     #barcodeCanvas,#labelBarcodeCanvas{display:none}
 
@@ -156,7 +159,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <img src="https://i.postimg.cc/GmHBH7mz/LOGO-BLACK-EMPTY-2x.png" alt="Nextwaves Industries" class="logo" onerror="this.style.display='none'">
+      <img src="https://i.postimg.cc/GmHBH7mz/LOGO-BLACK-EMPTY-2x.png" alt="Nextwaves Industries" class="logo" crossorigin="anonymous" onerror="this.style.display='none'">
       <h1>🏷️ Nextwaves Industries</h1>
       <p>Tạo Mã Vạch & Tem Sản Phẩm Chuyên Nghiệp</p>
     </div>
@@ -358,7 +361,7 @@
           ctx.fillStyle='white'; ctx.fillRect(0,0,canvas.width,canvas.height);
           ctx.drawImage(img,0,0);
           canvas.toBlob(function(blob){
-            if(blob.size>0){
+            if(blob && blob.size>0){
               const link=document.createElement('a');
               link.download=`ma-vach-${(document.getElementById('barcodeInput').value||'')}-${Date.now()}.png`;
               link.href=URL.createObjectURL(blob);
@@ -419,7 +422,7 @@
 
         /* Khối 1 */
         const b1=document.createElement('div'); b1.className='b1';
-        b1.innerHTML=`<div class="b1-inner"><img alt="logo" src="https://i.postimg.cc/GmHBH7mz/LOGO-BLACK-EMPTY-2x.png"></div>`;
+        b1.innerHTML=`<div class="b1-inner"><img alt="logo" crossorigin="anonymous" src="https://i.postimg.cc/GmHBH7mz/LOGO-BLACK-EMPTY-2x.png"></div>`;
 
         /* Khối 2 */
         const b2=document.createElement('div'); b2.className='b2';
@@ -445,7 +448,7 @@
         /* Khối 6 */
         const b6=document.createElement('div'); b6.className='b6';
         b6.innerHTML=`<div class="b6-inner"><div class="company">
-          Sản xuất bởi công ty TNHH Nextwaves Industries – 20/23 đường 35, Phường An Khánh, Thành Phố Hồ Chí Minh
+          Sản xuất bởi công ty TNHH Nextwaves Industries, 20/23 đường 35, Phường An Khánh, Thành Phố Hồ Chí Minh
         </div></div>`;
 
         /* Khối 7 */
@@ -474,20 +477,31 @@
       }
     }
 
-    /* ===== In & PDF: chụp ảnh DOM rồi dán lên PDF ===== */
-    function printLabel(){ window.print(); }
+    /* ===== In & PDF ===== */
+    function printLabel(){
+      const size=document.getElementById('labelSize').value;
+      const styleId='print-page-style';
+      let style=document.getElementById(styleId);
+      if(!style){
+        style=document.createElement('style'); style.id=styleId;
+        document.head.appendChild(style);
+      }
+      const dims = size==='70x100' ? '70mm 100mm' : '30mm 40mm';
+      style.innerHTML = `@page { size: ${dims}; margin: 0 }`;
+      window.print();
+    }
 
     async function downloadLabelPDF(){
       const labelElement=document.getElementById('labelPreview');
       if(!labelElement || !labelElement.innerHTML){alert('Vui lòng tạo tem trước khi tải xuống!');return;}
 
       const size=document.getElementById('labelSize').value;
-      const page = (size==='70x100') ? [350,500] : [150,200]; // mm
+      const page = (size==='70x100') ? [70,100] : [30,40]; // mm
 
       const { jsPDF } = window.jspdf;
       const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:page});
 
-      const canvas=await html2canvas(labelElement,{scale:2,backgroundColor:'#ffffff'});
+      const canvas=await html2canvas(labelElement,{scale:3,backgroundColor:'#ffffff',useCORS:true});
       const imgData=canvas.toDataURL('image/png');
       pdf.addImage(imgData,'PNG',0,0,page[0],page[1]);
       pdf.save(`tem-${size}-${Date.now()}.pdf`);
@@ -496,7 +510,6 @@
     /* THEO YÊU CẦU:
        - KHÔNG gán sự kiện input tự động cập nhật.
        - KHÔNG tự động gọi generateLabel khi chưa bấm nút.
-       (Do đó, không có đoạn auto-update/DOMContentLoaded ở đây.)
     */
   </script>
 </body>
